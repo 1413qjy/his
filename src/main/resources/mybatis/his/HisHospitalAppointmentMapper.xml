@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.his.mapper.HisHospitalAppointmentMapper">
+    
+    <resultMap type="HisHospitalAppointment" id="HisHospitalAppointmentResult">
+        <result property="appointmentId"    column="appointment_id"    />
+        <result property="hostName"    column="host_name"    />
+        <result property="hostPhone"    column="host_phone"    />
+        <result property="petName"    column="pet_name"    />
+        <result property="petAge"    column="pet_age"    />
+        <result property="hospitalId"    column="hospital_id"    />
+        <result property="deptsId"    column="depts_id"    />
+        <result property="appointmentTime"    column="appointment_time"    />
+    </resultMap>
+
+    <sql id="selectHisHospitalAppointmentVo">
+        select appointment_id, host_name, host_phone, pet_name, pet_age, hospital_id, depts_id, appointment_time from his_hospital_appointment
+    </sql>
+
+    <insert id="insertHisHospitalAppointment" parameterType="HisHospitalAppointment" useGeneratedKeys="true" keyProperty="appointmentId">
+        insert into his_hospital_appointment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="hostName != null and hostName != ''">host_name,</if>
+            <if test="hostPhone != null and hostPhone != ''">host_phone,</if>
+            <if test="petName != null">pet_name,</if>
+            <if test="petAge != null">pet_age,</if>
+            <if test="hospitalId != null">hospital_id,</if>
+            <if test="deptsId != null">depts_id,</if>
+            <if test="appointmentTime != null">appointment_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="hostName != null and hostName != ''">#{hostName},</if>
+            <if test="hostPhone != null and hostPhone != ''">#{hostPhone},</if>
+            <if test="petName != null">#{petName},</if>
+            <if test="petAge != null">#{petAge},</if>
+            <if test="hospitalId != null">#{hospitalId},</if>
+            <if test="deptsId != null">#{deptsId},</if>
+            <if test="appointmentTime != null">#{appointmentTime},</if>
+        </trim>
+    </insert>
+
+    <select id="selectHisHospitalAppointmentList" parameterType="HisHospitalAppointment" resultMap="HisHospitalAppointmentResult">
+        <include refid="selectHisHospitalAppointmentVo"/>
+        <where>
+            <if test="hostName != null  and hostName != ''"> and host_name like concat('%', #{hostName}, '%')</if>
+            <if test="hostPhone != null  and hostPhone != ''"> and host_phone = #{hostPhone}</if>
+            <if test="petName != null  and petName != ''"> and pet_name like concat('%', #{petName}, '%')</if>
+            <if test="petAge != null  and petAge != ''"> and pet_age = #{petAge}</if>
+            <if test="hospitalId != null "> and hospital_id = #{hospitalId}</if>
+            <if test="deptsId != null "> and depts_id = #{deptsId}</if>
+            <if test="appointmentTime != null "> and datediff(appointment_time,#{appointmentTime})=0</if>
+        </where>
+    </select>
+</mapper>

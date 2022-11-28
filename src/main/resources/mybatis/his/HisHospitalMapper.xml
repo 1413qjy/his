@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.his.mapper.HisHospitalMapper">
+
+    <resultMap type="HisHospital" id="HisHospitalResult">
+        <result property="hospitalId"    column="hospital_id"    />
+        <result property="hospitalName"    column="hospital_name"    />
+        <result property="hospitalSite"    column="hospital_site"    />
+        <result property="hospitalEmail"    column="hospital_email"    />
+        <result property="hospitalImage"    column="hospital_image"    />
+    </resultMap>
+
+    <sql id="selectHospitalVo" >
+        select hospital_id, hospital_name, hospital_site, hospital_email, hospital_image from his_hospital
+    </sql>
+
+
+    <select id="selectHospitalList" parameterType="HisHospital" resultMap="HisHospitalResult">
+        select h2.*
+        from his_hospital_user as h1
+        join his_hospital as h2 on h1.hospital_id = h2.hospital_id and h1.user_id = #{userid}
+    </select>
+
+<!--    根据id查询数据-->
+    <select id="selectHisHospitalById" parameterType="Long" resultMap="HisHospitalResult">
+        <include refid="selectHospitalVo"/>
+        where hospital_id = #{hospitalId}
+    </select>
+
+<!--    查询全部的数据-->
+    <select id="selectHospitalAllList" parameterType="HisHospital" resultMap="HisHospitalResult">
+        <include refid="selectHospitalVo"/>
+        <where>
+            <if test="hospitalName != null  and hospitalName != ''"> and hospital_name like concat('%', #{hospitalName}, '%')</if>
+            <if test="hospitalSite != null  and hospitalSite != ''"> and hospital_site = #{hospitalSite}</if>
+            <if test="hospitalEmail != null  and hospitalEmail != ''"> and hospital_email = #{hospitalEmail}</if>
+            <if test="hospitalImage != null  and hospitalImage != ''"> and hospital_image = #{hospitalImage}</if>
+        </where>
+    </select>
+
+</mapper>

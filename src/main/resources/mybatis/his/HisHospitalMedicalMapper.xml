@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.his.mapper.HisHospitalMedicalMapper">
+
+    <resultMap type="HisHospitalMedical" id="HisHospitalMedicalResult">
+        <result property="medicalId"    column="medical_id"    />
+        <result property="medicalName"    column="medical_name"    />
+        <result property="medicalAge"    column="medical_age"    />
+        <result property="medicalPost"    column="medical_post"    />
+        <result property="hospitalId"    column="hospital_id"    />
+        <result property="deptsId"    column="depts_id"    />
+        <result property="deptsMinute"    column="depts_minute"    />
+        <result property="inductionTime"    column="induction_time"    />
+        <result property="yiling"    column="yiling"    />
+        <result property="image"    column="image"    />
+    </resultMap>
+
+    <sql id="selectHisHospitalMedicalVo">
+        select medical_id, medical_name, medical_age, medical_post, hospital_id, depts_id, depts_minute, induction_time, yiling, image from his_hospital_medical
+    </sql>
+
+    <select id="selectHisHospitalMedicalList" parameterType="HisHospitalMedical" resultMap="HisHospitalMedicalResult">
+        <include refid="selectHisHospitalMedicalVo"/>
+        <where>
+            <if test="medicalName != null  and medicalName != ''"> and medical_name like concat('%', #{medicalName}, '%')</if>
+            <if test="medicalAge != null  and medicalAge != ''"> and medical_age = #{medicalAge}</if>
+            <if test="medicalPost != null  and medicalPost != ''"> and medical_post = #{medicalPost}</if>
+            <if test="hospitalId != null "> and hospital_id = #{hospitalId}</if>
+            <if test="deptsId != null "> and depts_id = #{deptsId}</if>
+            <if test="deptsMinute != null  and deptsMinute != ''"> and depts_minute = #{deptsMinute}</if>
+            <if test="inductionTime != null "> and induction_time = #{inductionTime}</if>
+            <if test="yiling != null  and yiling != ''"> and yiling = #{yiling}</if>
+            <if test="image != null  and image != ''"> and image = #{image}</if>
+        </where>
+    </select>
+
+    <select id="selectHisHospitalMedicalById" parameterType="Long" resultMap="HisHospitalMedicalResult">
+        <include refid="selectHisHospitalMedicalVo"/>
+        where medical_id = #{medicalId}
+    </select>
+
+    <insert id="insertHisHospitalMedical" parameterType="HisHospitalMedical" useGeneratedKeys="true" keyProperty="medicalId">
+        insert into his_hospital_medical
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="medicalName != null and medicalName != ''">medical_name,</if>
+            <if test="medicalAge != null">medical_age,</if>
+            <if test="medicalPost != null and medicalPost != ''">medical_post,</if>
+            <if test="hospitalId != null">hospital_id,</if>
+            <if test="deptsId != null">depts_id,</if>
+            <if test="deptsMinute != null">depts_minute,</if>
+            <if test="inductionTime != null">induction_time,</if>
+            <if test="yiling != null">yiling,</if>
+            <if test="image != null">image,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="medicalName != null and medicalName != ''">#{medicalName},</if>
+            <if test="medicalAge != null">#{medicalAge},</if>
+            <if test="medicalPost != null and medicalPost != ''">#{medicalPost},</if>
+            <if test="hospitalId != null">#{hospitalId},</if>
+            <if test="deptsId != null">#{deptsId},</if>
+            <if test="deptsMinute != null">#{deptsMinute},</if>
+            <if test="inductionTime != null">#{inductionTime},</if>
+            <if test="yiling != null">#{yiling},</if>
+            <if test="image != null">#{image},</if>
+        </trim>
+    </insert>
+
+    <update id="updateHisHospitalMedical" parameterType="HisHospitalMedical">
+        update his_hospital_medical
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="medicalName != null and medicalName != ''">medical_name = #{medicalName},</if>
+            <if test="medicalAge != null">medical_age = #{medicalAge},</if>
+            <if test="medicalPost != null and medicalPost != ''">medical_post = #{medicalPost},</if>
+            <if test="hospitalId != null">hospital_id = #{hospitalId},</if>
+            <if test="deptsId != null">depts_id = #{deptsId},</if>
+            <if test="deptsMinute != null">depts_minute = #{deptsMinute},</if>
+            <if test="inductionTime != null">induction_time = #{inductionTime},</if>
+            <if test="yiling != null">yiling = #{yiling},</if>
+            <if test="image != null">image = #{image},</if>
+        </trim>
+        where medical_id = #{medicalId}
+    </update>
+
+    <delete id="deleteHisHospitalMedicalById" parameterType="Long">
+        delete from his_hospital_medical where medical_id = #{medicalId}
+    </delete>
+
+    <delete id="deleteHisHospitalMedicalByIds" parameterType="String">
+        delete from his_hospital_medical where medical_id in
+        <foreach item="medicalId" collection="array" open="(" separator="," close=")">
+            #{medicalId}
+        </foreach>
+    </delete>
+</mapper>

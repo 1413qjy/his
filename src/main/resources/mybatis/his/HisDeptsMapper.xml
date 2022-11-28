@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.his.mapper.HisDeptsMapper">
+
+    <resultMap type="HisDepts" id="HisDeptsResult">
+        <result property="deptsId"    column="depts_id"    />
+        <result property="deptsName"    column="depts_name"    />
+        <result property="deptsCode"    column="depts_code"    />
+        <result property="deptsNum"    column="depts_num"    />
+        <result property="deptsLeader"    column="depts_leader"    />
+        <result property="deptsPhone"    column="depts_phone"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="hospitalId"    column="hospital_id"    />
+    </resultMap>
+
+    <sql id="selectHisDeptsVo">
+        select depts_id, depts_name, depts_code, depts_num, depts_leader, depts_phone, status, hospital_id, create_by, create_time, update_by, update_time from his_depts
+    </sql>
+
+    <!--    获取科室信息的sql-->
+    <select id="selectDeptsList" parameterType="HisDepts" resultMap="HisDeptsResult">
+        <include refid="selectHisDeptsVo"/>
+        <where>
+            <if test="deptsName != null  and deptsName != ''"> and depts_name like concat('%', #{deptsName}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+
+    <!--    删除科室的方法-->
+    <delete id="deleteDeptsById">
+        delete from his_depts where depts_id = #{param1}
+    </delete>
+
+    <!--    添加科室的方法-->
+    <insert id="insertHisDepts">
+        insert into his_depts
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptsId != null">depts_id,</if>
+            <if test="deptsName != null and deptsName != ''">depts_name,</if>
+            <if test="deptsCode != null and deptsCode != ''">depts_code,</if>
+            <if test="deptsNum != null">depts_num,</if>
+            <if test="deptsLeader != null">depts_leader,</if>
+            <if test="deptsPhone != null">depts_phone,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="hospitalId != null">hospital_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptsId != null">#{deptsId},</if>
+            <if test="deptsName != null and deptsName != ''">#{deptsName},</if>
+            <if test="deptsCode != null and deptsCode != ''">#{deptsCode},</if>
+            <if test="deptsNum != null">#{deptsNum},</if>
+            <if test="deptsLeader != null">#{deptsLeader},</if>
+            <if test="deptsPhone != null">#{deptsPhone},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="hospitalId != null">#{hospitalId},</if>
+        </trim>
+    </insert>
+
+    <!--    添加挂号量的sql-->
+    <update id="updateDeptsNum">
+        update his_depts
+        set depts_num = depts_num+1
+        where depts_id = #{param1}
+    </update>
+
+</mapper>

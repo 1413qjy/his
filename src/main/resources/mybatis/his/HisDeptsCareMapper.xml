@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.his.mapper.HisDeptsCareMapper">
+
+    <resultMap type="HisDeptsCare" id="HisDeptsCareResult">
+        <result property="deptsCareId"    column="depts_care_id"    />
+        <result property="deptsId"    column="depts_id"    />
+        <result property="deptsName"    column="depts_name"    />
+        <result property="deptsSum"    column="depts_sum"    />
+    </resultMap>
+
+    <sql id="selectHisDeptsCareVo">
+        select depts_care_id, depts_id, depts_name, depts_sum from his_depts_care
+    </sql>
+
+    <select id="selectHisDeptsCareList" parameterType="HisDeptsCare" resultMap="HisDeptsCareResult">
+        <include refid="selectHisDeptsCareVo"/>
+        <where>
+            <if test="deptsId != null "> and depts_id = #{deptsId}</if>
+            <if test="deptsName != null  and deptsName != ''"> and depts_name like concat('%', #{deptsName}, '%')</if>
+            <if test="deptsSum != null  and deptsSum != ''"> and depts_sum = #{deptsSum}</if>
+        </where>
+    </select>
+
+    <select id="selectHisDeptsCareById" parameterType="Long" resultMap="HisDeptsCareResult">
+        <include refid="selectHisDeptsCareVo"/>
+        <where>
+            <if test="deptsId != null "> and depts_id = #{deptsId}</if>
+        </where>
+    </select>
+</mapper>

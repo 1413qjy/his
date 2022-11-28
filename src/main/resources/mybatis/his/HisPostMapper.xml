@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.his.mapper.HisPostMapper">
+
+    <resultMap type="HisPost" id="HisPostResult">
+        <result property="postId"    column="post_id"    />
+        <result property="postName"    column="post_name"    />
+        <result property="postSum"    column="post_sum"    />
+    </resultMap>
+
+    <sql id="selectHisPostVo">
+        select post_id, post_name, post_sum from his_post
+    </sql>
+
+    <select id="selectHisPostList" parameterType="HisPost" resultMap="HisPostResult">
+        <include refid="selectHisPostVo"/>
+        <where>
+            <if test="postName != null  and postName != ''"> and post_name like concat('%', #{postName}, '%')</if>
+            <if test="postSum != null  and postSum != ''"> and post_sum = #{postSum}</if>
+        </where>
+    </select>
+</mapper>
